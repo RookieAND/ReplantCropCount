@@ -1,17 +1,17 @@
-package org.rookieand
+package org.rookieand.replantCropCount
 
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPlugin
 
 class ReplantCropCount: JavaPlugin() {
     override fun onEnable() {
         // setup
-        saveDefaultConfig();
-        logger.info("test");
+        saveDefaultConfig()
+        logger.info("test")
     }
 
     override fun onDisable() {
         // setup
-        saveConfig();
+        saveConfig()
     }
 
 }
