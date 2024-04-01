@@ -7,6 +7,7 @@ import org.bukkit.block.data.BlockData
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
+import org.bukkit.inventory.PlayerInventory
 
 class BlockChangesListener : Listener {
     private val cropBlockSet = setOf<Material>(Material.WHEAT, Material.CARROT, Material.POTATO, Material.NETHER_WART, Material.BEETROOTS)
@@ -14,6 +15,32 @@ class BlockChangesListener : Listener {
     private fun isFullyGrown (blockData: BlockData): Boolean {
         return if (blockData is Ageable) blockData.maximumAge == blockData.age else false;
     }
+
+    private fun removeSeeds(cropType: Material, playerInventory: PlayerInventory): Boolean {
+        if (!cropBlockSet.contains(cropType)) return false;
+
+        val needRemovedSeeds = cropSeedMap[cropType] ?: return false;
+        if (!playerInventory.contains(needRemovedSeeds)) return false;
+
+        val inventoryIterator = playerInventory.iterator();
+
+        while (inventoryIterator.hasNext()) {
+            val item = inventoryIterator.next()
+            if (item.type === needRemovedSeeds) {
+                val slotIndex = inventoryIterator.nextIndex();
+                if (item.amount == 1) {
+                    playerInventory.setItem(slotIndex, null);
+                } else {
+                    item.amount -= 1;
+                    playerInventory.setItem(slotIndex, item);
+                }
+                break;
+            }
+        }
+
+        return true;
+    }
+
     @EventHandler
     fun onBreakCropBlock(event: BlockBreakEvent) {
         val player = event.player
@@ -21,7 +48,7 @@ class BlockChangesListener : Listener {
 
         val brokenBlockData = event.block.blockData;
         if (isFullyGrown(brokenBlockData) and cropBlockSet.contains(brokenBlockData.material)) {
-           
+            val hasEnoughSeed = removeSeeds(brokenBlockData.material, player.inventory);
         }
     }
 }
