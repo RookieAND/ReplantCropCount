@@ -3,7 +3,7 @@ package org.rookieand.replantCropCount
 import net.kyori.adventure.text.Component
 import org.bukkit.plugin.java.JavaPlugin
 
-class ReplantCropCount: JavaPlugin() {
+class ReplantCropCountPlugin: JavaPlugin() {
     override fun onEnable() {
         // setup
         logger.info("test")
