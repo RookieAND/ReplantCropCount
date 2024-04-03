@@ -1,9 +1,13 @@
 package org.rookieand.replantCropCount.manager
 
+import org.bukkit.Bukkit
+import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.block.data.Ageable
 import org.bukkit.block.data.BlockData
+import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
+import org.rookieand.replantCropCount.ReplantCropCountPlugin
 
 object CropManager {
     private val cropBlockSet =
@@ -16,36 +20,36 @@ object CropManager {
         Material.BEETROOTS to Material.BEETROOT_SEEDS
     )
 
-    fun isFullyGrown(blockData: BlockData): Boolean {
+    fun isFullyGrownCrop(blockData: BlockData): Boolean {
         if (blockData !is Ageable) return false
-        return blockData.maximumAge == blockData.age
+        return cropBlockSet.contains(blockData.material) && blockData.maximumAge == blockData.age
     }
 
-    fun isCropBlock(blockData: BlockData): Boolean {
-        return cropBlockSet.contains(blockData.material)
-    }
-
-    fun takeSeed(cropType: Material, playerInventory: PlayerInventory): Boolean {
+    fun hasEnoughSeed(cropType: Material, playerInventory: PlayerInventory): Boolean {
         if (!cropBlockSet.contains(cropType)) return false
-
         val needRemovedSeeds = cropSeedMap[cropType] ?: return false
-        if (!playerInventory.contains(needRemovedSeeds)) return false
+        return playerInventory.contains(needRemovedSeeds)
+    }
 
-        val inventoryIterator = playerInventory.iterator()
+    fun takeSeed(cropType: Material, playerInventory: PlayerInventory) {
+        val needSeed = cropSeedMap[cropType] ?: return
+        if (!playerInventory.contains(needSeed)) return
 
-        while (inventoryIterator.hasNext()) {
-            val item = inventoryIterator.next()
-            if (item.type === needRemovedSeeds) {
-                val slotIndex = inventoryIterator.nextIndex()
-                if (item.amount == 1) {
-                    playerInventory.setItem(slotIndex, null)
-                } else {
-                    item.amount -= 1
-                    playerInventory.setItem(slotIndex, item)
-                }
-                break
+        for ((index, item) in playerInventory.contents.withIndex()) {
+            if (item !is ItemStack || item.type != needSeed) continue
+            if (item.amount == 1) {
+                playerInventory.setItem(index, null)
+            } else {
+                item.amount -= 1
+                playerInventory.setItem(index, item)
             }
+            break
         }
-        return true
+    }
+
+    fun replantCrop(cropType: Material, location: Location) {
+        Bukkit.getScheduler().runTaskLater(ReplantCropCountPlugin.instance, Runnable {
+            location.block.type = cropType
+        }, 20L)
     }
 }

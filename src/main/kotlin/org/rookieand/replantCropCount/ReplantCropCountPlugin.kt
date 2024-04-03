@@ -1,12 +1,17 @@
 package org.rookieand.replantCropCount
 
-import net.kyori.adventure.text.Component
 import org.bukkit.plugin.java.JavaPlugin
+import org.rookieand.replantCropCount.listener.BlockChangesListener
 
 class ReplantCropCountPlugin : JavaPlugin() {
+
+    companion object {
+        lateinit var instance: JavaPlugin
+    }
+
     override fun onEnable() {
-        logger.info("test")
-        server.consoleSender.sendMessage(Component.text("plugin is enabled."))
+        instance = this
+        server.pluginManager.registerEvents(BlockChangesListener(), this)
     }
 
     override fun onDisable() {
