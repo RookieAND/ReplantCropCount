@@ -1,5 +1,6 @@
-package org.rookieand.replantCropCount.manager
+package kr.argonaut.replantCropCount.manager
 
+import kr.argonaut.replantCropCount.ReplantCropCountPlugin
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
@@ -7,7 +8,6 @@ import org.bukkit.block.data.Ageable
 import org.bukkit.block.data.BlockData
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
-import org.rookieand.replantCropCount.ReplantCropCountPlugin
 
 object CropManager {
     private val cropBlockSet =
