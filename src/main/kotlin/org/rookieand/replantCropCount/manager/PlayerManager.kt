@@ -1,4 +1,4 @@
-package kr.argonaut.replantCropCount.manager
+package org.rookieand.replantCropCount.manager
 
 import org.bukkit.entity.Player
 

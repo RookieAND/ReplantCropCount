@@ -1,7 +1,7 @@
-package kr.argonaut.replantCropCount
+package org.rookieand.replantCropCount
 
-import kr.argonaut.replantCropCount.listener.BlockChangesListener
 import org.bukkit.plugin.java.JavaPlugin
+import org.rookieand.replantCropCount.listener.BlockChangesListener
 
 class ReplantCropCountPlugin : JavaPlugin() {
 

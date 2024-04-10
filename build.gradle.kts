@@ -1,7 +1,8 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-group = "kr.argonaut"
+group = "org.rookieand"
 version = "1.0-SNAPSHOT"
 
 val mcApiVersion: String by project
@@ -22,7 +23,7 @@ plugins {
 
 repositories {
     mavenCentral()
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://oss.sonatype.org/content/repositories/snapshots")
 }
 
@@ -32,7 +33,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     implementation("io.insert-koin:koin-core:3.5.3")
 
-    compileOnly("org.spigotmc:spigot-api:${mcApiVersion}")
+    compileOnly("io.papermc.paper:paper-api:${mcApiVersion}")
 
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -60,6 +61,10 @@ tasks {
 
     withType<KotlinCompile>().configureEach {
         kotlinOptions.jvmTarget = java17.toString()
+    }
+
+    withType<ShadowJar> {
+        archiveFileName.set("${project.name.lowercase()}-${project.version}.jar")
     }
 
     processResources {
