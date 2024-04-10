@@ -1,5 +1,4 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "org.rookieand"
@@ -54,6 +53,7 @@ java {
 
 tasks {
     withType<JavaCompile>().configureEach {
+        options.encoding = "UTF-8"
         if (java17 >= 10 || JavaVersion.current().isJava10Compatible) {
             options.release.set(java17)
         }
@@ -61,10 +61,6 @@ tasks {
 
     withType<KotlinCompile>().configureEach {
         kotlinOptions.jvmTarget = java17.toString()
-    }
-
-    withType<ShadowJar> {
-        archiveFileName.set("${project.name.lowercase()}-${project.version}.jar")
     }
 
     processResources {
