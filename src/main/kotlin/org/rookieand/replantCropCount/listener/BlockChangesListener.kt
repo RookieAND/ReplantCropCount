@@ -19,18 +19,17 @@ class BlockChangesListener(
         val blockMaterial = blockData.material
         val playerInventory = player.inventory
 
-        if (!cropManager.isFullyGrownCrop(blockData) && cropManager.hasEnoughSeed(
+        if (cropManager.isFullyGrownCrop(blockData) && cropManager.hasEnoughSeed(
                 blockMaterial,
                 playerInventory
             )
-        ) return
+        ) {
+            cropManager.takeSeed(
+                blockMaterial,
+                playerInventory
+            )
 
-        cropManager.takeSeed(
-            blockData.material,
-            playerInventory
-        )
-
-        cropManager.replantCrop(blockData.material, event.block.location)
-
+            cropManager.replantCrop(blockData.material, event.block.location)
+        }
     }
 }
