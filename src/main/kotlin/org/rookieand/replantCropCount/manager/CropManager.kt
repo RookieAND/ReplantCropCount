@@ -7,9 +7,11 @@ import org.bukkit.block.data.Ageable
 import org.bukkit.block.data.BlockData
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
-import org.rookieand.replantCropCount.ReplantCropCountPlugin
+import org.bukkit.plugin.java.JavaPlugin
 
-object CropManager {
+class CropManager(
+    private val plugin: JavaPlugin
+) {
     private val cropBlockSet =
         setOf<Material>(Material.WHEAT, Material.CARROT, Material.POTATO, Material.NETHER_WART, Material.BEETROOTS)
     private val cropSeedMap = mapOf<Material, Material>(
@@ -48,7 +50,7 @@ object CropManager {
     }
 
     fun replantCrop(cropType: Material, location: Location) {
-        Bukkit.getScheduler().runTaskLater(ReplantCropCountPlugin.instance, Runnable {
+        Bukkit.getScheduler().runTaskLater(plugin, Runnable {
             location.block.type = cropType
         }, 20L)
     }

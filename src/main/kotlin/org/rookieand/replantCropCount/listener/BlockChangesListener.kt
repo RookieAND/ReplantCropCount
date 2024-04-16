@@ -6,7 +6,10 @@ import org.bukkit.event.Listener
 import org.bukkit.event.block.BlockBreakEvent
 import org.rookieand.replantCropCount.manager.CropManager
 
-class BlockChangesListener : Listener {
+class BlockChangesListener(
+    private val cropManager: CropManager
+) : Listener {
+
     @EventHandler
     fun onBreakCropBlock(event: BlockBreakEvent) {
         val player = event.player
@@ -16,18 +19,18 @@ class BlockChangesListener : Listener {
         val blockMaterial = blockData.material
         val playerInventory = player.inventory
 
-        if (!CropManager.isFullyGrownCrop(blockData) && CropManager.hasEnoughSeed(
+        if (!cropManager.isFullyGrownCrop(blockData) && cropManager.hasEnoughSeed(
                 blockMaterial,
                 playerInventory
             )
         ) return
 
-        CropManager.takeSeed(
+        cropManager.takeSeed(
             blockData.material,
             playerInventory
         )
 
-        CropManager.replantCrop(blockData.material, event.block.location)
+        cropManager.replantCrop(blockData.material, event.block.location)
 
     }
 }

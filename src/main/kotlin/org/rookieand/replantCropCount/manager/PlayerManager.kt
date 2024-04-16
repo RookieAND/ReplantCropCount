@@ -2,7 +2,7 @@ package org.rookieand.replantCropCount.manager
 
 import org.bukkit.entity.Player
 
-object PlayerManager {
+class PlayerManager {
 
     private val playerCountMap = hashMapOf<Player, Int>()
 
